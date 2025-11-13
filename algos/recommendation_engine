@@ -178,7 +178,15 @@ for (const auto& artist : artists) {
         return recommendations;
     }
 
-      const UnionFind& getCommunities() const { return communities; }
+    string getUserCommunity(const string& user_id) {
+        return communities.getCommunity(user_id);
+    }
+
+    int getCommunitySize(const string& user_id) {
+        return communities.getCommunitySize(user_id);
+    }
+
+    const UnionFind& getCommunities() const { return communities; }
 };
 
   #endif
