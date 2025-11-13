@@ -1,0 +1,101 @@
+song_id,title,artist_id,genre,bpm,energy,danceability,valence,mood
+S001,Sicko Mode,A001,Hip Hop,155,0.76,0.83,0.45,energetic
+S002,Blinding Lights,A002,Synthpop,171,0.73,0.51,0.33,energetic
+S003,Hurricane,A003,Hip Hop,140,0.62,0.71,0.22,dark
+S004,Save Your Tears,A002,Pop,118,0.68,0.59,0.28,chill
+S005,Anti-Hero,A004,Pop,97,0.65,0.58,0.42,chill
+S006,Bad Guy,A005,Pop,135,0.43,0.70,0.56,dark
+S007,The Hills,A002,RnB,113,0.58,0.59,0.14,dark
+S008,Starboy,A002,RnB,186,0.59,0.68,0.35,energetic
+S009,goosebumps,A001,Hip Hop,130,0.71,0.84,0.35,energetic
+S010,Shape of You,A006,Pop,96,0.65,0.83,0.93,happy
+S011,Levitating,A007,Pop,103,0.70,0.70,0.83,happy
+S012,Don't Start Now,A007,Pop,124,0.79,0.79,0.68,energetic
+S013,Sunflower,A008,Hip Hop,90,0.48,0.76,0.77,chill
+S014,Circles,A008,Pop,120,0.76,0.70,0.55,chill
+S015,rockstar,A008,Hip Hop,160,0.53,0.74,0.13,dark
+S016,Humble,A009,Hip Hop,150,0.61,0.91,0.42,energetic
+S017,DNA,A009,Hip Hop,145,0.82,0.61,0.41,energetic
+S018,Alright,A009,Hip Hop,92,0.74,0.83,0.68,happy
+S019,Money Trees,A009,Hip Hop,145,0.58,0.84,0.32,chill
+S020,God's Plan,A010,Hip Hop,77,0.45,0.75,0.36,chill
+S021,One Dance,A010,Afrobeat,104,0.61,0.79,0.60,happy
+S022,Hotline Bling,A010,RnB,135,0.52,0.81,0.44,chill
+S023,STARSTRUKK,A011,EDM,128,0.87,0.73,0.71,energetic
+S024,Memories,A012,Pop,91,0.42,0.77,0.22,chill
+S025,Girls Like You,A012,Pop,125,0.72,0.87,0.47,happy
+S026,Payphone,A012,Pop,110,0.78,0.68,0.42,energetic
+S027,Bohemian Rhapsody,A013,Rock,144,0.39,0.50,0.22,dark
+S028,We Will Rock You,A013,Rock,82,0.81,0.56,0.41,energetic
+S029,Don't Stop Me Now,A013,Rock,156,0.88,0.67,0.94,happy
+S030,Another One Bites the Dust,A013,Rock,110,0.65,0.75,0.68,energetic
+S031,Closer,A014,EDM,95,0.52,0.75,0.33,chill
+S032,Something Just Like This,A014,EDM,103,0.64,0.63,0.44,chill
+S033,Roses,A014,EDM,100,0.48,0.76,0.28,dark
+S034,Wake Me Up,A015,EDM,124,0.71,0.67,0.39,energetic
+S035,The Nights,A015,EDM,126,0.77,0.59,0.71,happy
+S036,Waiting For Love,A015,EDM,128,0.62,0.68,0.35,chill
+S037,Peaches,A016,Pop,90,0.68,0.68,0.62,happy
+S038,Sorry,A016,Pop,100,0.65,0.75,0.45,chill
+S039,Love Yourself,A016,Pop,100,0.39,0.61,0.42,chill
+S040,What Do You Mean,A016,Pop,125,0.62,0.72,0.44,happy
+S041,Rolling in the Deep,A017,Pop,105,0.78,0.75,0.17,dark
+S042,Hello,A017,Pop,79,0.44,0.50,0.21,dark
+S043,Someone Like You,A017,Pop,135,0.40,0.60,0.23,dark
+S044,Set Fire to the Rain,A017,Pop,108,0.76,0.55,0.21,dark
+S045,Sky Full of Stars,A018,Pop,124,0.78,0.66,0.44,happy
+S046,Viva La Vida,A018,Pop,138,0.75,0.55,0.24,energetic
+S047,The Scientist,A018,Pop,146,0.45,0.51,0.23,dark
+S048,Fix You,A018,Rock,138,0.68,0.45,0.31,chill
+S049,Lucid Dreams,A019,Hip Hop,84,0.51,0.51,0.23,dark
+S050,All Girls Are the Same,A019,Hip Hop,161,0.44,0.73,0.18,dark
+S051,Robbery,A019,Hip Hop,143,0.42,0.72,0.17,dark
+S052,Bandit,A019,Hip Hop,163,0.82,0.83,0.38,energetic
+S053,Heroes Tonight,A020,EDM,128,0.81,0.69,0.72,energetic
+S054,Force,A020,EDM,128,0.79,0.71,0.68,energetic
+S055,Astronomia,A020,EDM,120,0.67,0.84,0.65,energetic
+S056,Heat,A001,Hip Hop,130,0.78,0.85,0.52,energetic
+S057,Praise God,A003,Hip Hop,84,0.55,0.68,0.28,dark
+S058,Off The Grid,A003,Hip Hop,150,0.85,0.79,0.42,energetic
+S059,Moon,A003,Hip Hop,130,0.38,0.51,0.18,dark
+S060,24,A003,Hip Hop,98,0.42,0.45,0.31,chill
+S061,Happier Than Ever,A005,Pop,120,0.34,0.54,0.13,dark
+S062,Ocean Eyes,A005,Pop,87,0.39,0.61,0.21,chill
+S063,everything i wanted,A005,Pop,143,0.28,0.57,0.15,dark
+S064,my future,A005,Pop,84,0.41,0.62,0.49,chill
+S065,Can't Feel My Face,A002,Pop,108,0.75,0.76,0.62,energetic
+S066,Earned It,A002,RnB,81,0.39,0.56,0.19,dark
+S067,I Feel It Coming,A002,Pop,93,0.61,0.68,0.43,chill
+S068,Often,A002,RnB,98,0.59,0.70,0.31,dark
+S069,Die For You,A002,Pop,134,0.63,0.61,0.25,dark
+S070,Love Story,A004,Pop,119,0.44,0.58,0.51,happy
+S071,Blank Space,A004,Pop,96,0.76,0.76,0.58,energetic
+S072,Shake It Off,A004,Pop,160,0.80,0.65,0.94,happy
+S073,You Belong With Me,A004,Pop,130,0.60,0.62,0.66,happy
+S074,Willow,A004,Pop,90,0.51,0.68,0.41,chill
+S075,Thinking Out Loud,A006,Pop,79,0.44,0.78,0.45,happy
+S076,Photograph,A006,Pop,108,0.61,0.61,0.35,chill
+S077,Perfect,A006,Pop,95,0.45,0.60,0.30,happy
+S078,Castle on the Hill,A006,Pop,135,0.69,0.52,0.49,energetic
+S079,Shivers,A006,Pop,141,0.82,0.78,0.86,happy
+S080,beautiful mistakes,A012,Pop,94,0.76,0.77,0.36,chill
+S081,Congratulations,A008,Hip Hop,123,0.63,0.63,0.33,chill
+S082,Better Now,A008,Pop,145,0.68,0.67,0.34,chill
+S083,Psycho,A008,Hip Hop,140,0.56,0.74,0.23,dark
+S084,Wow,A008,Hip Hop,130,0.42,0.87,0.27,energetic
+S085,Stir Fry,A011,Hip Hop,97,0.72,0.92,0.65,energetic
+S086,Walk It Talk It,A011,Hip Hop,126,0.61,0.88,0.38,energetic
+S087,MotorSport,A011,Hip Hop,93,0.69,0.92,0.28,energetic
+S088,Narcos,A011,Hip Hop,142,0.78,0.83,0.42,energetic
+S089,Paranoid,A003,Hip Hop,120,0.74,0.85,0.36,energetic
+S090,Father Stretch My Hands,A003,Hip Hop,118,0.77,0.63,0.48,energetic
+S091,Ultralight Beam,A003,Hip Hop,127,0.58,0.52,0.38,chill
+S092,Fade,A003,Hip Hop,136,0.84,0.71,0.44,energetic
+S093,Essence,A021,Afrobeat,124,0.69,0.82,0.71,happy
+S094,Bloody Samaritan,A021,Afrobeat,102,0.81,0.89,0.68,energetic
+S095,Calm Down,A022,Afrobeat,86,0.59,0.83,0.75,happy
+S096,Come Closer,A022,Afrobeat,103,0.67,0.79,0.82,happy
+S097,0 to 100,A010,Hip Hop,78,0.67,0.83,0.38,energetic
+S098,Passionfruit,A010,RnB,118,0.40,0.82,0.40,chill
+S099,Controlla,A010,Afrobeat,102,0.57,0.85,0.64,happy
+S100,Too Good,A010,Afrobeat,102,0.46,0.73,0.61,chill
