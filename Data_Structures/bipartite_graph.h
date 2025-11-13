@@ -6,42 +6,47 @@
 #include <string>
 #include <algorithm>
 
-
+using namespace std;
 
 struct BipartiteEdge {
-    std::string to;
+      string to;
     double weight; // Normalized play count
 
-    BipartiteEdge(const std::string& t, double w) : to(t), weight(w) {}
+    BipartiteEdge(const   string& t, double w) : to(t), weight(w) {}
 };
 
 class BipartiteGraph {
 private:
-    std::unordered_map<std::string, std::vector<BipartiteEdge>> user_to_artist;
+    // User -> Artists adjacency
+      unordered_map<  string,   vector<BipartiteEdge>> user_to_artist;
 
-    std::unordered_map<std::string, std::vector<BipartiteEdge>> artist_to_user;
+    // Artist -> Users adjacency
+      unordered_map<  string,   vector<BipartiteEdge>> artist_to_user;
 
-    std::unordered_map<std::string, int> max_plays_per_user;
+    // Max play counts for normalization
+      unordered_map<  string, int> max_plays_per_user;
 
 public:
     
-    void addEdge(const std::string& user_id, const std::string& artist_id, int play_count) {
-        if (max_plays_per_user.find(user_id) = max_plays_per_user.end()) {
+    void addEdge(const   string& user_id, const   string& artist_id, int play_count) {
+        // Update max play count for user
+        if (max_plays_per_user.find(user_id) == max_plays_per_user.end()) {
             max_plays_per_user[user_id] = play_count;
         } else {
-            max_plays_per_user[user_id] = std::max(max_plays_per_user[user_id], play_count);
+            max_plays_per_user[user_id] = max(max_plays_per_user[user_id], play_count);
         }
 
-        user_to_artist[artist_id].push_back(BipartiteEdge(artist_id, play_count));
-        artist_to_user[user_id].push_back(BipartiteEdge(user_id, play_count));
+        // Store raw play count (will normalize later)
+        user_to_artist[user_id].push_back(BipartiteEdge(artist_id, play_count));
+        artist_to_user[artist_id].push_back(BipartiteEdge(user_id, play_count));
     }
 
-    
     void normalizeWeights() {
+        // Normalize user->artist edges
         for (auto& it : user_to_artist) {
             auto& user_id = it.first;
             auto& edges = it.second;
-            double max_plays = static_cast<int>(max_plays_per_user[user_id]);
+            double max_plays = static_cast<double>(max_plays_per_user[user_id]);
             if (max_plays > 0) {
                 for (auto& edge : edges) {
                     edge.weight = edge.weight / max_plays;
@@ -49,6 +54,7 @@ public:
             }
         }
 
+        // Normalize artist->user edges
         for (auto& it : artist_to_user) {
             auto& artist_id = it.first;
             auto& edges = it.second;
@@ -61,9 +67,8 @@ public:
         }
     }
 
-    
-    std::vector<std::pair<std::string, double>> getTopArtistsForUser(
-        const std::string& user_id,
+    vector<pair<string, double>> getTopArtistsForUser(
+        const string& user_id,
         int k
     ) const {
         auto it = user_to_artist.find(user_id);
@@ -71,67 +76,64 @@ public:
             return {};
         }
 
-        std::vector<std::pair<std::string, double>> artists;
+        vector<pair<string, double>> artists;
         for (const auto& edge : it->second) {
             artists.push_back({edge.to, edge.weight});
         }
 
         // Sort by weight descending
-        std::sort(artists.begin(), artists.end(),
+        sort(artists.begin(), artists.end(),
             [](const auto& a, const auto& b) {
                 return a.second > b.second;
             });
 
         // Return top K
         if (artists.size() > static_cast<size_t>(k)) {
-            artists.size()==k;
+            artists.resize(k);
         }
 
         return artists;
     }
 
-    
-    std::vector<std::pair<std::string, double>> getArtistsForUser(
-        const std::string& user_id
+    vector<pair<string, double>> getArtistsForUser(
+        const string& user_id
     ) const {
         auto it = user_to_artist.find(user_id);
         if (it == user_to_artist.end()) {
             return {};
         }
 
-        std::vector<std::pair<std::string, double>> artists;
+        vector<pair<string, double>> artists;
         for (const auto& edge : it->second) {
-            artists.push_back({edge.weight, edge.to});
+            artists.push_back({edge.to, edge.weight});
         }
 
         return artists;
     }
 
-    
-    std::vector<std::pair<std::string, double>> getUsersForArtist(
-        const std::string& artist_id
+    vector<pair<string, double>> getUsersForArtist(
+        const string& artist_id
     ) const {
         auto it = artist_to_user.find(artist_id);
-        if (it = artist_to_user.end()) {
+        if (it == artist_to_user.end()) {
             return {};
         }
 
-        std::vector<std::pair<std::string, double>> users;
+        vector<pair<string, double>> users;
         for (const auto& edge : it->second) {
             users.push_back({edge.to, edge.weight});
         }
 
         // Sort by weight descending
-        std::sort(users.begin(), users.end(),
+        sort(users.begin(), users.end(),
             [](const auto& a, const auto& b) {
-                return a.second < b.second;
+                return a.second > b.second;
             });
 
         return users;
     }
 
-    
-    double getEdgeWeight(const std::string& user_id, const std::string& artist_id) const {
+    double getEdgeWeight(const string& user_id, const string& artist_id) const {
         auto it = user_to_artist.find(user_id);
         if (it == user_to_artist.end()) {
             return 0.0;
@@ -146,15 +148,14 @@ public:
         return 0.0;
     }
 
-    
-    std::vector<std::pair<std::string, double>> recommendFromTopArtists(
-        const std::string& user_id,
-        const std::unordered_map<std::string, std::vector<std::string>>& artist_songs,
+    vector<pair<string, double>> recommendFromTopArtists(
+        const string& user_id,
+        const unordered_map<string, vector<string>>& artist_songs,
         int top_artists = 5
     ) const {
         auto top_artists_list = getTopArtistsForUser(user_id, top_artists);
 
-        std::unordered_map<std::string, double> song_scores;
+        unordered_map<string, double> song_scores;
 
         // Collect songs from top artists, weighted by artist preference
         for (const auto& it1 : top_artists_list) {
@@ -168,14 +169,15 @@ public:
             }
         }
 
-        std::vector<std::pair<std::string, double>> recommendations;
+        // Convert to vector and sort
+        vector<pair<string, double>> recommendations;
         for (const auto& it : song_scores) {
             auto& song_id = it.first;
             auto& score = it.second;
             recommendations.push_back({song_id, score});
         }
 
-        std::sort(recommendations.begin(), recommendations.end(),
+        sort(recommendations.begin(), recommendations.end(),
             [](const auto& a, const auto& b) {
                 return a.second > b.second;
             });
@@ -183,17 +185,14 @@ public:
         return recommendations;
     }
 
-   
     int getUserCount() const {
         return user_to_artist.size();
     }
 
-    
     int getArtistCount() const {
         return artist_to_user.size();
     }
 
-    
     int getEdgeCount() const {
         int count = 0;
         for (const auto& it : user_to_artist) {
@@ -204,17 +203,14 @@ public:
         return count;
     }
 
-    
-    bool hasUser(const std::string& user_id) const {
+    bool hasUser(const   string& user_id) const {
         return user_to_artist.find(user_id) != user_to_artist.end();
     }
 
-    
-    bool hasArtist(const std::string& artist_id) const {
+    bool hasArtist(const   string& artist_id) const {
         return artist_to_user.find(artist_id) != artist_to_user.end();
     }
 
-   
     void clear() {
         user_to_artist.clear();
         artist_to_user.clear();
@@ -222,4 +218,4 @@ public:
     }
 };
 
-#endif 
+#endif
