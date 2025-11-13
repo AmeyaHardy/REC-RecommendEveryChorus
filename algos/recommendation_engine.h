@@ -127,6 +127,62 @@ for (const auto& artist : artists) {
       cout << "\n[Pillar 2 & 4] Building user similarity graph and taste communities..." << endl;
         buildUserSimilarities();
 
+        
+//Pillar 2
+    vector<Recommendation> getUserCollaborativeRecommendations(
+        const string& user_id,
+        int num_recommendations = 10
+    ) {
+        vector<Recommendation> recommendations;
+
+        // Get top K similar users
+        auto similar_users = user_graph.getTopKSimilarUsers(user_id, k_similar_users);
+
+        if (similar_users.empty()) {
+            return recommendations;
+        }
+
+        // Aggregate songs liked by similar users
+        unordered_map<string, double> song_scores;
+        auto& current_user_likes = user_liked_songs[user_id];
+
+        for (const auto& it : similar_users) {
+            auto& similar_user_id = it.first;
+            auto& similarity = it.second;
+            auto& similar_user_likes = user_liked_songs[similar_user_id];
+
+            for (const auto& song_id : similar_user_likes) {
+                // Don't recommend already liked songs
+                if (current_user_likes.find(song_id) == current_user_likes.end()) {
+                    song_scores[song_id] += similarity;
+                }
+            }
+        }
+
+        // Convert to recommendations
+        for (const auto& it : song_scores) {
+            auto& song_id = it.first;
+            auto& score = it.second;
+            auto song_it = song_map.find(song_id);
+            if (song_it != song_map.end()) {
+                recommendations.push_back(
+                    Recommendation(song_id, song_it->second.title, score, "user-collab")
+                );
+            }
+        }
+
+        // Sort by score
+        sort(recommendations.begin(), recommendations.end());
+
+        if (recommendations.size() > static_cast<size_t>(num_recommendations)) {
+            recommendations.resize(num_recommendations);
+        }
+
+        return recommendations;
+    }
+        
+
+//Pillar 4
       vector<Recommendation> getCommunityBasedRecommendations(
         const string& user_id,
         int num_recommendations = 10
