@@ -130,7 +130,8 @@ g++ -std=c++17 -g main.cpp -o rec_engine_debug
 ```bash
 g++ -std=c++17 -g -fsanitize=address -fsanitize=undefined main.cpp -o rec_engine_asan
 ```
-
+To fix encoding also run (if needed) : chcp 65001
+$OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
 ---
 
 ## 🌐 6. Clone the Repository
@@ -167,9 +168,9 @@ Clustering communities...
 
 Generating recommendations for User U001...
 Top Recommendations:
-1. Praise God
-2. Paranoid
-3. Off The Grid
+1. Money Trees Score - 10.51 
+2. Praise God - 7.91 
+3. God's Plan - 7.61 
 ...
 ```
 
@@ -229,42 +230,30 @@ This project is available under the **MIT License**.
 
 ---
 
-## 📬 13. Contact
-
-For issues or contributions, open an Issue or Pull Request on GitHub.
-
----
-
-If you want, I can also create:
-
-* A shorter README version
-* A college-submission PDF report
-* A polished PowerPoint
-* A complete GitHub repo description & tags
-
-Just tell me.
-
-10. Cloning the Repository
-Clone using HTTPS : git clone https://github.com/AmeyaHardy/REC-RecommendEveryChorus.git
-
-Clone using SSH : git clone git@github.com:AmeyaHardy/REC-RecommendEveryChorus.git
-
-Clone using GitHub CLI : gh repo clone AmeyaHardy/REC-RecommendEveryChorus
-
-After Cloning : cd REC-RecommendEveryChorus
-
-Then continue with: cd backend
-g++ -std=c++17 -O2 main.cpp -o recommendation_engine
-./recommendation_engine
-
-To fix encoding also run : chcp 65001
-$OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
-
 
 # 📊 Visualizations (Graph Analysis)
 
 This project includes several visualizations generated using Python and NetworkX/Matplotlib.
 These diagrams help explain how the recommendation system understands users, songs, and artists internally.
+
+Commands
+
+1. Navigate to the visualizations folder : cd visualizations
+
+2. Install required Python packages
+   
+If you are using pip : pip install -r requirements.txt
+Or with pip3 : pip3 install -r requirements.txt
+
+3. Run the visualization script : python visualize_graphs.py
+
+If your system uses Python 3 explicitly : python3 visualize_graphs.py
+
+
+
+
+
+
 
 ---
 
@@ -343,15 +332,6 @@ This graph connects users based on how similar their listening habits are.
 This visualization shows the backbone of **similarity-based recommendations**, where the system chooses the closest neighbors to influence the final personalized ranking.
 
 ---
-
-If you want, I can also:
-
-✅ Add captions under each image for your README
-✅ Create a markdown gallery
-✅ Generate hyperlinks so each graph links to the `visualizations/` folder
-✅ Write a short explanation to include in your GitHub “About” section
-
-Just tell me!
 
 
 
