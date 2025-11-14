@@ -242,7 +242,7 @@ for (const auto& artist : artists) {
         return communities.getCommunitySize(user_id);
     }
 
-    const UnionFind& getCommunities() const { return communities; }
+    UnionFind& getCommunities() { return communities; }
 };
 
   #endif
