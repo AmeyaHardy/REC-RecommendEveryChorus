@@ -258,5 +258,13 @@ g++ -std=c++17 -O2 main.cpp -o recommendation_engine
 ./recommendation_engine
 
 
+![WhatsApp Image 2025-11-14 at 3 38 57 PM (1)](https://github.com/user-attachments/assets/259c1c55-2e27-4e05-93e2-615ed41df0b4)
+![WhatsApp Image 2025-11-14 at 3 38 57 PM (2)](https://github.com/user-attachments/assets/a0340aab-a51e-4efb-a1f8-c4382e2c5749)
+![WhatsApp Image 2025-11-14 at 3 38 57 PM](https://github.com/user-attachments/assets/f3c488e1-2586-4f32-9dcf-64091cbed89a)
+![WhatsApp Image 2025-11-14 at 3 38 58 PM (1)](https://github.com/user-attachments/assets/2aca4bc8-46c1-48cb-86d3-6a2026a6bd73)
+![WhatsApp Image 2025-11-14 at 3 38 58 PM](https://github.com/user-attachments/assets/ea27e5d1-41ec-4b36-986e-1fc36b9ecd2e)
+
+
+
 
 
