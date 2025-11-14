@@ -9,7 +9,7 @@
 void printHeader() {
     std::cout << "\n";
     std::cout << "╔═══════════════════════════════════════════════════════════════╗\n";
-    std::cout << "║     SPOTIFY-LIKE MUSIC RECOMMENDATION SYSTEM (DSA PROJECT)    ║\n";
+    std::cout << "║            MUSIC RECOMMENDATION SYSTEM (DSA PROJECT)          ║\n";
     std::cout << "║                 Academic Implementation in C++                ║\n";
     std::cout << "╚═══════════════════════════════════════════════════════════════╝\n";
     std::cout << "\n";
