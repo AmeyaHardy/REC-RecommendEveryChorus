@@ -86,6 +86,21 @@ public:
     const BipartiteGraph& getBipartiteGraph() const { return bipartite_graph; }
     UnionFind& getCommunities() { return communities; }
 
+    int getKNearest() const { return k_nearest; }
+    int getKSimilarUsers() const { return k_similar_users; }
+
+
+    void normalizePillarScores(std::vector<Recommendation>& recs, double pillarMax) {
+        if (recs.empty()) return;
+
+        if (pillarMax <= 0.0) return;
+
+        for (auto &r : recs) {
+            r.score = (r.score / pillarMax) * 10.0;
+            if (r.score > 10.0) r.score = 10.0;   // clamp upper bound
+        }
+    }
+
     // initialize: populate maps, trie, interactions and build similarities
     void initialize(
         const vector<Song>& songs,
