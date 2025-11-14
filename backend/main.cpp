@@ -103,15 +103,21 @@ void demonstrateForUser(RecommendationEngine& engine, const std::string& user_id
     std::cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" << std::endl;
 
     auto content_recs = engine.getContentBasedRecommendations(user_id, 5);
+    engine.normalizePillarScores(content_recs, static_cast<double>(engine.getKNearest()));
     printPillarRecommendations("PILLAR 1: Content-Based Filtering (K-D Tree)", content_recs);
 
     auto user_collab_recs = engine.getUserCollaborativeRecommendations(user_id, 5);
+    engine.normalizePillarScores(user_collab_recs, static_cast<double>(engine.getKSimilarUsers()));
     printPillarRecommendations("PILLAR 2: User-User Collaborative Filtering (Weighted Graph)", user_collab_recs);
 
     auto artist_recs = engine.getArtistBasedRecommendations(user_id, 5);
+    engine.normalizePillarScores(artist_recs, 1.0);
     printPillarRecommendations("PILLAR 3: Artist-Based Collaborative Filtering (Bipartite Graph)", artist_recs);
 
     auto community_recs = engine.getCommunityBasedRecommendations(user_id, 5);
+    int commSize = engine.getCommunitySize(user_id);
+    double communityMax = (commSize > 1) ? static_cast<double>(commSize - 1) : 1.0;
+    engine.normalizePillarScores(community_recs, communityMax);
     printPillarRecommendations("PILLAR 4: Community-Based Recommendations (Union-Find)", community_recs);
 
     // Combined recommendations
