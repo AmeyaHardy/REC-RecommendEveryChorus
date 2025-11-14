@@ -124,3 +124,91 @@ void demonstrateForUser(RecommendationEngine& engine, const std::string& user_id
     printRecommendations(combined_recs);
 }
 
+void demonstrateSearch(RecommendationEngine& engine) {
+    std::cout << "\n\n";
+    std::cout << "═══════════════════════════════════════════════════════════════" << std::endl;
+    std::cout << " SEARCH AUTOCOMPLETE DEMONSTRATION (TRIE)" << std::endl;
+    std::cout << "═══════════════════════════════════════════════════════════════" << std::endl;
+
+    std::vector<std::string> queries = {"bl", "star", "love", "sun", "bad"};
+
+    for (const auto& query : queries) {
+        auto results = engine.searchAutocomplete(query, 5);
+        std::cout << "\nQuery: \"" << query << "\"" << std::endl;
+        std::cout << "Results:" << std::endl;
+
+        if (results.empty()) {
+            std::cout << "  No results found." << std::endl;
+        } else {
+            for (size_t i = 0; i < results.size(); ++i) {
+                std::cout << "  " << (i + 1) << ". " << results[i] << std::endl;
+            }
+        }
+    }
+}
+
+int main() {
+    printHeader();
+
+    // Dataset paths
+    std::string base_path = "datasets/";
+    std::string songs_file = base_path + "songs.csv";
+    std::string artists_file = base_path + "artists.csv";
+    std::string users_file = base_path + "users.csv";
+    std::string user_song_interactions_file = base_path + "user_song_interactions.csv";
+    std::string user_artist_interactions_file = base_path + "user_artist_interactions.csv";
+
+    // Load data
+    std::cout << "Loading datasets..." << std::endl;
+    std::cout << "──────────────────────────────────────────────────────────────" << std::endl;
+
+    auto songs = DataLoader::loadSongs(songs_file);
+    auto artists = DataLoader::loadArtists(artists_file);
+    auto users = DataLoader::loadUsers(users_file);
+    auto song_interactions = DataLoader::loadUserSongInteractions(user_song_interactions_file);
+    auto artist_interactions = DataLoader::loadUserArtistInteractions(user_artist_interactions_file);
+
+    if (songs.empty() || artists.empty() || users.empty()) {
+        std::cerr << "\nError: Failed to load datasets. Please check file paths." << std::endl;
+        std::cerr << "Expected location: ./datasets/" << std::endl;
+        return 1;
+    }
+
+    // Initialize recommendation engine
+    RecommendationEngine engine;
+    engine.initialize(songs, artists, users, song_interactions, artist_interactions);
+
+    // Demonstrate for multiple users
+    std::vector<std::string> demo_users = {"U001", "U004", "U009", "U012"};
+
+    for (const auto& user_id : demo_users) {
+        demonstrateForUser(engine, user_id);
+    }
+
+    // Demonstrate search
+    demonstrateSearch(engine);
+
+    // Print summary statistics
+    std::cout << "\n\n";
+    std::cout << "═══════════════════════════════════════════════════════════════" << std::endl;
+    std::cout << " SYSTEM STATISTICS" << std::endl;
+    std::cout << "═══════════════════════════════════════════════════════════════" << std::endl;
+    std::cout << "\nData Structures Performance:" << std::endl;
+    std::cout << "  • K-D Tree: " << songs.size() << " songs indexed in 4D space" << std::endl;
+    std::cout << "  • Weighted Graph: " << engine.getUserGraph().getVertexCount()
+              << " users, " << engine.getUserGraph().getEdgeCount() << " similarity edges" << std::endl;
+    std::cout << "  • Bipartite Graph: " << engine.getBipartiteGraph().getUserCount()
+              << " users × " << engine.getBipartiteGraph().getArtistCount() << " artists" << std::endl;
+    std::cout << "  • Union-Find: " << engine.getCommunities().getNumberOfCommunities()
+              << " taste communities formed" << std::endl;
+    std::cout << "  • Trie: Autocomplete enabled for " << (songs.size() + artists.size()) << " entries" << std::endl;
+
+    std::cout << "\n\n";
+    std::cout << "╔═══════════════════════════════════════════════════════════════╗\n";
+    std::cout << "║              DEMONSTRATION COMPLETED SUCCESSFULLY             ║\n";
+    std::cout << "╚═══════════════════════════════════════════════════════════════╝\n";
+    std::cout << "\n";
+
+    return 0;
+}
+
