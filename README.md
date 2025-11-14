@@ -1,200 +1,262 @@
-# REC-RecommendEveryChorus
+ 🎼 RecommendationEveryChorus (REC)
 
-Music Recommendation System
+### A Music Recommendation Engine using Classical DSA (C++17)
 
+RecommendationEveryChorus (REC) is an academic project that recreates a miniature Spotify-like recommendation engine using only **Data Structures and Algorithms**, implemented from scratch in **modern C++17**.
+No machine learning libraries, no frameworks — just pure algorithms.
 
-Academic Project — Data Structures & Algorithms (C++17)
-This project implements a miniature music recommendation engine inspired by Spotify, built entirely using core Data Structures and Algorithms in C++17.
-All algorithms and data structures are implemented from scratch for academic learning.
+---
 
+## 🔍 1. Project Summary
 
-Project Overview
+This project demonstrates how real-world recommendation systems can be built using classical concepts:
 
-This system demonstrates how classical DSA concepts can be applied to real-world recommendation engines.
+* 🎧 **Content-based filtering** with a K-D Tree
+* 👥 **Collaborative filtering** through user similarity graphs
+* 🎤 **Artist-based modeling** via bipartite graphs
+* 🪢 **Community detection** using Union-Find (Disjoint Sets)
+* 🔤 **Autocomplete** using a Trie
+* 🏆 **Top-K ranking** using priority queues
+* ⚡ **O(1) lookups** using hash maps and hash sets
 
-1.Core Objectives
+All algorithms, data structures, and utility modules are handwritten.
 
-Apply advanced DSA in a real application
-Implement both content-based and collaborative filtering
-Build everything without external ML libraries
-Provide clean, documented, easily compilable C++17 code
+---
 
-2. System Capabilities
-The system supports the following high-level features:
+## 🧱 2. System Architecture
 
-  2.1 Content-Based Filtering (Song-to-Song Similarity)
-  Uses a 4-dimensional K-D Tree to store songs based on audio features:
-  energy
-  danceability
-  valence
-  tempo
-  The K-D Tree enables efficient retrieval of nearest neighbors in feature space.
-
-  2.2 User-User Collaborative Filtering
-  Users are represented as nodes in a weighted graph, where edges represent similarity scores based on:
-  overlap in liked songs
-  listening behaviour
-  artist preferences
-  A priority queue retrieves top neighbors for recommendation generation.
-
-  2.3 Artist-Based Collaborative Filtering
-  A bipartite graph between user nodes and artist nodes is constructed.
-  Weights on edges represent user–artist interaction strength (play counts, likes, etc.).
-  Recommendations are generated based on the most relevant artists for a user.
-
-  2.4 Taste Community Detection (Union-Find)
-  Users who share similar listening habits are grouped via a disjoint-set union structure.
-  This allows the system to provide community-based recommendations:
-  common songs within the community
-  shared artists
-  trending preferences
-
-
-
-3.Features
-Sr.No  | Pillar                               | Data Structure Used | Algorithm                   | Complexity |
------- | ------------------------------------ | ------------------- | --------------------------- | ---------- |
-  1    | Content-Based Filtering              | K-D Tree            | K-NN                        | O(k log n) |
-  2    | User-User Collaborative Filtering    | Weighted Graph      | Similarity + Priority Queue | O(E log k) |
-  3    | Artist-Based Collaborative Filtering | Bipartite Graph     | Weighted aggregation        | O(A × S)   |
-  4    | Community-Based Filtering            | Union-Find          | Community detection         | O(α(n))    |
-
-
-
-
-4.Data Structures Implemented
-
-K-D Tree – multi-dimensional nearest neighbor search
-
-Weighted Graph – models user similarity
-
-Bipartite Graph – user–artist relationships
-
-Union-Find – clustering into taste communities
-
-Trie – prefix-based search and autocomplete
-
-Hash Maps / Sets – constant-time lookups
-
-Priority Queues – top-K recommendation ranking
-
-
-
-5.Dataset
-The dataset consists of small, realistic CSV files that reflect typical music platform metadata.
-
-5.1 Songs
-Contains:
-song_id
-title
-artist
-BPM
-energy
-valence
-danceability
-popularity
-
-5.2 Artists
-Contains:
-artist_id
-name
-genre
-
-5.3 Users
-Contains:
-user_id
-username
-
-5.4 User-Song Interactions
-Tracks:
-play counts
-likes
-skips
-
-
-
-6.Project Structure 
-
+```
 backend/
   core/
-      entities.h
-      data_loader.h
-   data_structures/
-      kdtree.h
-      weighted_graph.h
-      bipartite_graph.h
-      union_find.h
-      trie.h
-   algorithms/
-      recommendation_engine.h
-   datasets/
-      songs.csv
-      artists.csv
-      users.csv
-      user_song_interactions.csv
-      user_artist_interactions.csv
-   main.cpp
+    entities.h
+    data_loader.h
+  data_structures/
+    kdtree.h
+    weighted_graph.h
+    bipartite_graph.h
+    union_find.h
+    trie.h
+  algorithms/
+    recommendation_engine.h
+  datasets/
+    songs.csv
+    artists.csv
+    users.csv
+    user_song_interactions.csv
+    user_artist_interactions.csv
+  main.cpp
 
 visualizations/
-    visualize_graphs.py
-    requirements.txt
+  visualize_graphs.py
+  requirements.txt
 
 frontend/
-    src/
-    package.json
-
 docs/
-    ARCHITECTURE.md
-    DSA_MAPPING.md
-    README.md
+```
 
+---
 
+## 🎵 3. Recommendation Pipeline
 
-7. Building and Running the Backend
-7.1 Compile
-   cd backend
-g++ -std=c++17 -O2 main.cpp -o recommendation_engine
+### 3.1 Content-Based Filtering
 
-7.2 Run
-./recommendation_engine
+A **4-dimensional K-D Tree** stores songs using audio features (energy, valence, danceability, tempo).
+Nearest-neighbor queries produce content-based recommendations.
 
-7.3 Debug Build
-g++ -std=c++17 -g main.cpp -o recommendation_engine_debug
+### 3.2 User–User Collaborative Filtering
 
-Address Sanitizer Build
-g++ -std=c++17 -g -fsanitize=address main.cpp -o recommendation_engine_asan
+A **weighted user similarity graph** is built using:
 
+* liked-song overlap
+* play-count similarity
+* cosine/Jaccard measures
 
+Top similar users are retrieved using a priority queue.
 
-8. Time and Space Complexity
-| Module                   | Complexity | Notes                            |
-| ------------------------ | ---------- | -------------------------------- |
-| Content-Based Search     | O(k log n) | k nearest neighbors via K-D Tree |
-| User Similarity          | O(E log k) | graph traversal + PQ             |
-| Artist-Based             | O(A × S)   | weighted aggregation             |
-| Community Detection      | O(α(n))    | almost O(1) operations           |
-| Combined Recommendations | Sum of all | normalized score fusion          |
+### 3.3 Artist-Based Collaborative Filtering
 
+A **user ↔ artist bipartite graph** aggregates artist affinities using play counts.
 
-9. Visualizations
-Python scripts in visualizations/ generate:
-user similarity network
-user–artist bipartite graphs
-taste community clusters
-2D projections of K-D Tree splits
-These provide a graphical understanding of the relationships and clusters.
+### 3.4 Taste Communities
 
+A **Union-Find** clusters users with similar listening patterns.
+Community preferences are added to the final scoring.
+
+### 3.5 Combined Recommendation
+
+All scores are normalized and fused to generate the final ranked list.
+
+---
+
+## 📁 4. Dataset Summary
+
+Datasets are stored in `backend/datasets/`.
+
+### Included Files:
+
+* `songs.csv` — song metadata + audio features
+* `artists.csv` — artist info
+* `users.csv` — user list
+* `user_song_interactions.csv` — liked + play count data
+* `user_artist_interactions.csv` — aggregated artist play counts
+
+Your updated datasets (the ones you provided) should be pasted directly into the two CSV files above.
+
+---
+
+## 🛠️ 5. Build & Run
+
+### 5.1 Compile
+
+```bash
+cd backend
+g++ -std=c++17 -O2 main.cpp -o rec_engine
+```
+
+### 5.2 Run
+
+```bash
+./rec_engine
+```
+
+### 5.3 Debug Build
+
+```bash
+g++ -std=c++17 -g main.cpp -o rec_engine_debug
+```
+
+### 5.4 Sanitizer Build (memory / UB checks)
+
+```bash
+g++ -std=c++17 -g -fsanitize=address -fsanitize=undefined main.cpp -o rec_engine_asan
+```
+
+---
+
+## 🌐 6. Clone the Repository
+
+```bash
+git clone https://github.com/AmeyaHardy/REC-RecommendEveryChorus.git
+cd REC-RecommendEveryChorus
+```
+
+GitHub CLI:
+
+```bash
+gh repo clone AmeyaHardy/REC-RecommendEveryChorus
+```
+
+SSH:
+
+```bash
+git clone git@github.com:AmeyaHardy/REC-RecommendEveryChorus.git
+```
+
+---
+
+## 📊 7. Example Output (Shortened)
+
+```
+Loading datasets...
+Loaded 100 songs, 22 artists, 20 users.
+
+Building K-D Tree...
+Building user similarity graph...
+Building bipartite graph...
+Clustering communities...
+
+Generating recommendations for User U001...
+Top Recommendations:
+1. Praise God
+2. Paranoid
+3. Off The Grid
+...
+```
+
+---
+
+## 📈 8. Time Complexity Overview
+
+| Component             | Data Structure      | Complexity |
+| --------------------- | ------------------- | ---------- |
+| K-D Tree Build        | Median partitioning | O(n log n) |
+| K-NN Search           | K-D Tree            | O(k log n) |
+| User Similarity Graph | Weighted Graph      | O(E log k) |
+| Artist-Based Scoring  | Bipartite Graph     | O(A × S)   |
+| Community Merging     | Union-Find          | O(α(n))    |
+| Autocomplete          | Trie                | O(L)       |
+
+Where:
+
+* `n` = number of songs
+* `U` = number of users
+* `A` = artists
+* `S` = songs per user
+
+---
+
+## 📚 9. Documentation
+
+The `docs/` folder contains:
+
+* **ARCHITECTURE.md** — detailed architecture & diagrams
+* **DSA_MAPPING.md** — full mapping of algorithms to features
+* **README.md** — this documentation
+
+---
+
+## 🚀 10. Future Enhancements
+
+* Matrix factorization (SVD)
+* Locality-Sensitive Hashing for approximate NN
+* Graph embeddings
+* REST API layer
+* PostgreSQL integration
+* Multi-threaded recommendation generation
+* Docker support
+
+---
+
+## 🤝 11. Contributing
+
+Pull requests, code improvements, dataset enhancements, or documentation updates are welcome.
+
+---
+
+## 📜 12. License
+
+This project is available under the **MIT License**.
+
+---
+
+## 📬 13. Contact
+
+For issues or contributions, open an Issue or Pull Request on GitHub.
+
+---
+
+If you want, I can also create:
+
+* A shorter README version
+* A college-submission PDF report
+* A polished PowerPoint
+* A complete GitHub repo description & tags
+
+Just tell me.
 
 10. Cloning the Repository
-Clone using HTTPS : git clone https://github.com/<your-username>/<your-repo-name>.git
+Clone using HTTPS : git clone https://github.com/AmeyaHardy/REC-RecommendEveryChorus.git
 
-Clone using SSH : git clone git@github.com:<your-username>/<your-repo-name>.git
+Clone using SSH : git clone git@github.com:AmeyaHardy/REC-RecommendEveryChorus.git
 
-Clone using GitHub CLI : gh repo clone <your-username>/<your-repo-name>
+Clone using GitHub CLI : gh repo clone AmeyaHardy/REC-RecommendEveryChorus
 
-After Cloning : cd <your-repo-name>
+After Cloning : cd REC-RecommendEveryChorus
 
 Then continue with: cd backend
 g++ -std=c++17 -O2 main.cpp -o recommendation_engine
 ./recommendation_engine
+
+
+
 
