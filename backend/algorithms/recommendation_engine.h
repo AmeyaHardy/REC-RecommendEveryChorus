@@ -12,7 +12,7 @@
 #include "../Data_Structures/weighted_graph.h"
 #include "../Data_Structures/bipartite_graph.h"
 #include "../Data_Structures/tries.h"
-#include "../Data_Structures/kdtree.h"
+#include "../Data_StructURES/kdtree.h"
 
 using namespace std;
 
@@ -34,12 +34,11 @@ private:
     unordered_map<string, set<string>> user_liked_songs;
 
     // Configuration
-    double similarity_threshold = 0.3; // For Union-Find merging
+    double similarity_threshold = 0.3;
     int k_nearest = 10;
     int k_similar_users = 5;
     int top_artists = 5;
 
-    
     void buildUserSimilarities() {
         vector<string> users;
         for (const auto& it : user_map) {
@@ -48,13 +47,11 @@ private:
             communities.makeSet(uid);
         }
 
-        // Build weighted graph based on Jaccard similarity
         for (size_t i = 0; i < users.size(); ++i) {
             for (size_t j = i + 1; j < users.size(); ++j) {
                 const string& u1 = users[i];
                 const string& u2 = users[j];
 
-                // Calculate Jaccard similarity on liked songs
                 double similarity = WeightedGraph::jaccardSimilarity(
                     user_liked_songs[u1],
                     user_liked_songs[u2]
@@ -63,7 +60,6 @@ private:
                 if (similarity > 0.0) {
                     user_graph.addEdge(u1, u2, similarity);
 
-                    // Merge into same community if highly similar
                     if (similarity >= similarity_threshold) {
                         communities.unionSets(u1, u2);
                     }
@@ -71,10 +67,13 @@ private:
             }
         }
 
-        cout << "Built user similarity graph with " << user_graph.getEdgeCount()
-                  << " edges across " << users.size() << " users." << endl;
-        cout << "Formed " << communities.getNumberOfCommunities()
-                  << " taste communities." << endl;
+        cout << "Built user similarity graph with "
+             << user_graph.getEdgeCount()
+             << " edges across " << users.size() << " users." << endl;
+
+        cout << "Formed "
+             << communities.getNumberOfCommunities()
+             << " taste communities." << endl;
     }
 
 public:
@@ -89,28 +88,21 @@ public:
     ) {
         cout << "\n=== Initializing Recommendation Engine ===" << endl;
 
-        // Build maps
         for (const auto& song : songs) {
-    song_map[song.song_id] = song;
-    artist_songs[song.artist_id].push_back(song.song_id);
+            song_map[song.song_id] = song;
+            artist_songs[song.artist_id].push_back(song.song_id);
+            search_trie.insert(song.title);
+        }
 
-    // Insert ONLY the title into the trie
-    search_trie.insert(song.title);
-}
-
-for (const auto& artist : artists) {
-    artist_map[artist.artist_id] = artist;
-
-    // Insert ONLY the artist name
-    search_trie.insert(artist.artist_name);
-}
-
+        for (const auto& artist : artists) {
+            artist_map[artist.artist_id] = artist;
+            search_trie.insert(artist.artist_name);
+        }
 
         for (const auto& user : users) {
             user_map[user.user_id] = user;
         }
 
-        // Process interactions
         for (const auto& interaction : song_interactions) {
             user_song_plays[interaction.user_id][interaction.song_id] = interaction.play_count;
 
@@ -119,7 +111,6 @@ for (const auto& artist : artists) {
                 user_map[interaction.user_id].liked_songs.push_back(interaction.song_id);
             }
 
-            // Increment search frequency for popular songs
             if (interaction.play_count > 10) {
                 auto it = song_map.find(interaction.song_id);
                 if (it != song_map.end()) {
@@ -128,24 +119,23 @@ for (const auto& artist : artists) {
             }
         }
 
-      cout << "\n[Pillar 2 & 4] Building user similarity graph and taste communities..." << endl;
+        cout << "\n[Pillar 2 & 4] Building user similarity graph and taste communities..." << endl;
         buildUserSimilarities();
+    }  
 
 
-        //PILLAR 1
+    // PILLAR 1
+
     vector<Recommendation> getContentBasedRecommendations(
         const string& user_id,
         int num_recommendations = 10
     ) {
         vector<Recommendation> recommendations;
-
-        // Get user's liked songs
         auto it = user_liked_songs.find(user_id);
         if (it == user_liked_songs.end() || it->second.empty()) {
             return recommendations;
         }
 
-        // Find similar songs for each liked song
         unordered_map<string, double> song_scores;
 
         for (const auto& liked_song_id : it->second) {
@@ -155,26 +145,21 @@ for (const auto& artist : artists) {
             auto similar = kdtree.findSimilarSongs(song_it->second, k_nearest);
 
             for (const auto& similar_id : similar) {
-                // Don't recommend already liked songs
                 if (it->second.find(similar_id) == it->second.end()) {
                     song_scores[similar_id] += 1.0;
                 }
             }
         }
 
-        // Convert to recommendations
         for (const auto& it : song_scores) {
-            auto& song_id = it.first;
-            auto& score = it.second;
-            auto song_it = song_map.find(song_id);
+            auto song_it = song_map.find(it.first);
             if (song_it != song_map.end()) {
                 recommendations.push_back(
-                    Recommendation(song_id, song_it->second.title, score, "content")
+                    Recommendation(it.first, song_it->second.title, it.second, "content")
                 );
             }
         }
 
-        // Sort by score
         sort(recommendations.begin(), recommendations.end());
 
         if (recommendations.size() > static_cast<size_t>(num_recommendations)) {
@@ -183,22 +168,21 @@ for (const auto& artist : artists) {
 
         return recommendations;
     }
-        
-//Pillar 2
+
+
+    // PILLAR 2
+
     vector<Recommendation> getUserCollaborativeRecommendations(
         const string& user_id,
         int num_recommendations = 10
     ) {
         vector<Recommendation> recommendations;
 
-        // Get top K similar users
         auto similar_users = user_graph.getTopKSimilarUsers(user_id, k_similar_users);
-
         if (similar_users.empty()) {
             return recommendations;
         }
 
-        // Aggregate songs liked by similar users
         unordered_map<string, double> song_scores;
         auto& current_user_likes = user_liked_songs[user_id];
 
@@ -208,36 +192,31 @@ for (const auto& artist : artists) {
             auto& similar_user_likes = user_liked_songs[similar_user_id];
 
             for (const auto& song_id : similar_user_likes) {
-                // Don't recommend already liked songs
                 if (current_user_likes.find(song_id) == current_user_likes.end()) {
                     song_scores[song_id] += similarity;
                 }
             }
         }
 
-        // Convert to recommendations
         for (const auto& it : song_scores) {
-            auto& song_id = it.first;
-            auto& score = it.second;
-            auto song_it = song_map.find(song_id);
+            auto song_it = song_map.find(it.first);
             if (song_it != song_map.end()) {
                 recommendations.push_back(
-                    Recommendation(song_id, song_it->second.title, score, "user-collab")
+                    Recommendation(it.first, song_it->second.title, it.second, "user-collab")
                 );
             }
         }
 
-        // Sort by score
         sort(recommendations.begin(), recommendations.end());
 
-        if (recommendations.size() > static_cast<size_t>(num_recommendations)) {
+        if (recommendations.size() > static_cast<size_t>(num_recommendations))
             recommendations.resize(num_recommendations);
-        }
 
         return recommendations;
     }
 
-    //PILLAR 3
+    // PILLAR 3
+
     vector<Recommendation> getArtistBasedRecommendations(
         const string& user_id,
         int num_recommendations = 10
@@ -245,53 +224,41 @@ for (const auto& artist : artists) {
         vector<Recommendation> recommendations;
 
         auto song_scores = bipartite_graph.recommendFromTopArtists(
-            user_id,
-            artist_songs,
-            top_artists
+            user_id, artist_songs, top_artists
         );
 
-        // Filter out already liked songs
         auto& user_likes = user_liked_songs[user_id];
 
         for (const auto& it : song_scores) {
-            auto& song_id = it.first;
-            auto& score = it.second;
-            if (user_likes.find(song_id) == user_likes.end()) {
-                auto song_it = song_map.find(song_id);
+            if (user_likes.find(it.first) == user_likes.end()) {
+                auto song_it = song_map.find(it.first);
                 if (song_it != song_map.end()) {
                     recommendations.push_back(
-                        Recommendation(song_id, song_it->second.title, score, "artist-collab")
+                        Recommendation(it.first, song_it->second.title, it.second, "artist-collab")
                     );
                 }
             }
         }
 
-        // Sort by score
         sort(recommendations.begin(), recommendations.end());
-
-        if (recommendations.size() > static_cast<size_t>(num_recommendations)) {
+        if (recommendations.size() > static_cast<size_t>(num_recommendations))
             recommendations.resize(num_recommendations);
-        }
 
         return recommendations;
     }
-        
 
-//Pillar 4
-      vector<Recommendation> getCommunityBasedRecommendations(
+    // PILLAR 4
+
+    vector<Recommendation> getCommunityBasedRecommendations(
         const string& user_id,
         int num_recommendations = 10
     ) {
         vector<Recommendation> recommendations;
 
-        // Get community members
         auto community_members = communities.getCommunityMembers(user_id);
 
-        if (community_members.size() <= 1) {
-            return recommendations; // No other members
-        }
+        if (community_members.size() <= 1) return recommendations;
 
-        // Aggregate popular songs in community
         unordered_map<string, double> song_scores;
         auto& current_user_likes = user_liked_songs[user_id];
 
@@ -307,27 +274,22 @@ for (const auto& artist : artists) {
             }
         }
 
-        // Convert to recommendations
         for (const auto& it : song_scores) {
-            auto& song_id = it.first;
-            auto& score = it.second;
-            auto song_it = song_map.find(song_id);
+            auto song_it = song_map.find(it.first);
             if (song_it != song_map.end()) {
                 recommendations.push_back(
-                    Recommendation(song_id, song_it->second.title, score, "community")
+                    Recommendation(it.first, song_it->second.title, it.second, "community")
                 );
             }
         }
 
-        // Sort by score
         sort(recommendations.begin(), recommendations.end());
-
-        if (recommendations.size() > static_cast<size_t>(num_recommendations)) {
+        if (recommendations.size() > static_cast<size_t>(num_recommendations))
             recommendations.resize(num_recommendations);
-        }
 
         return recommendations;
     }
+
 
     string getUserCommunity(const string& user_id) {
         return communities.getCommunity(user_id);
@@ -340,4 +302,4 @@ for (const auto& artist : artists) {
     UnionFind& getCommunities() { return communities; }
 };
 
-  #endif
+#endif
