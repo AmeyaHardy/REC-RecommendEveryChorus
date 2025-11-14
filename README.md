@@ -258,6 +258,101 @@ g++ -std=c++17 -O2 main.cpp -o recommendation_engine
 ./recommendation_engine
 
 
+
+# 📊 Visualizations (Graph Analysis)
+
+This project includes several visualizations generated using Python and NetworkX/Matplotlib.
+These diagrams help explain how the recommendation system understands users, songs, and artists internally.
+
+---
+
+## 1. 🎧 Taste Communities (Union-Find Clustering)
+
+This graph shows **four listening communities** formed using a **Union-Find (Disjoint Set)** data structure.
+
+* Each circle represents a user.
+* Users with similar listening patterns are merged into the same cluster.
+* Colors indicate the community they belong to.
+* Connections represent shared preferences or similarity edges.
+
+**Purpose:**
+The recommendation engine uses these communities to give *community-influenced suggestions* — songs liked by similar users in the same cluster.
+
+---
+
+## 2. 🎤 User–Artist Bipartite Graph
+
+*(Edge thickness = normalized play count)*
+
+This bipartite graph connects **users (left)** to **artists (right)**.
+
+* Users are shown in blue nodes.
+* Artists are shown in green nodes.
+* Each edge represents the user’s listening intensity for that artist.
+* Thicker edges mean higher play counts.
+
+**Purpose:**
+This graph powers **artist-based collaborative filtering**, allowing the system to recommend songs from artists a user has historically engaged with strongly.
+
+---
+
+## 3. 🎶 K-D Tree Song Space (2D Projection)
+
+*Energy vs Danceability, colored by genre*
+
+This scatter plot shows the **distribution of songs** in the feature space used by the K-D Tree.
+
+* X-axis = Energy
+* Y-axis = Danceability
+* Colors = different genres
+* Labels show popular song names used during KNN searches
+
+**Purpose:**
+This visualization demonstrates how the system performs **content-based filtering** using nearest-neighbor search in a multi-dimensional feature space.
+
+---
+
+## 4. 🎵 User–Song Bipartite Graph
+
+*(Users on left, Songs on right)*
+
+A second bipartite graph showing the direct relationship between **users** and the **songs they’ve liked or listened to**.
+
+* Blue nodes = users
+* Pink/red nodes = songs
+* Edge thickness loosely represents total interactions
+
+**Purpose:**
+This graph is central to **user–user collaborative filtering**, where similarity is determined by overlap in liked songs.
+
+---
+
+## 5. 👥 User–User Similarity Weighted Graph
+
+*(Edge thickness = Jaccard similarity)*
+
+This graph connects users based on how similar their listening habits are.
+
+* Users with more songs in common have thicker edges.
+* Node color corresponds to degree (how many strong connections they have).
+* Highly connected users form the core of recommendation neighborhoods.
+
+**Purpose:**
+This visualization shows the backbone of **similarity-based recommendations**, where the system chooses the closest neighbors to influence the final personalized ranking.
+
+---
+
+If you want, I can also:
+
+✅ Add captions under each image for your README
+✅ Create a markdown gallery
+✅ Generate hyperlinks so each graph links to the `visualizations/` folder
+✅ Write a short explanation to include in your GitHub “About” section
+
+Just tell me!
+
+
+
 ![WhatsApp Image 2025-11-14 at 3 38 57 PM (1)](https://github.com/user-attachments/assets/259c1c55-2e27-4e05-93e2-615ed41df0b4)
 ![WhatsApp Image 2025-11-14 at 3 38 57 PM (2)](https://github.com/user-attachments/assets/a0340aab-a51e-4efb-a1f8-c4382e2c5749)
 ![WhatsApp Image 2025-11-14 at 3 38 57 PM](https://github.com/user-attachments/assets/f3c488e1-2586-4f32-9dcf-64091cbed89a)
