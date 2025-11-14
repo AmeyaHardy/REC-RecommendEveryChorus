@@ -9,6 +9,10 @@
 #include <iostream>
 #include "../core/entities.h"
 #include "../data_structures/union_find.h"
+#include "../data_structures/weighted_graph"
+#include "../data_structures/bipartite_graph"
+#include "../data_structures/tries.h"
+#include "../data_structures/kdtree.h"
 
 using namespace std;
 
