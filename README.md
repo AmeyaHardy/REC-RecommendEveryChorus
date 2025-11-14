@@ -249,6 +249,8 @@ Or with pip3 : pip3 install -r requirements.txt
 
 If your system uses Python 3 explicitly : python3 visualize_graphs.py
 
+5. 5 png graph visualization will be saved in your device this command is to view them : ls -lh *.png
+
 
 
 
