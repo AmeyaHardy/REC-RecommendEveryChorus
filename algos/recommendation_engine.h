@@ -127,6 +127,58 @@ for (const auto& artist : artists) {
       cout << "\n[Pillar 2 & 4] Building user similarity graph and taste communities..." << endl;
         buildUserSimilarities();
 
+
+        //PILLAR 1
+    vector<Recommendation> getContentBasedRecommendations(
+        const string& user_id,
+        int num_recommendations = 10
+    ) {
+        vector<Recommendation> recommendations;
+
+        // Get user's liked songs
+        auto it = user_liked_songs.find(user_id);
+        if (it == user_liked_songs.end() || it->second.empty()) {
+            return recommendations;
+        }
+
+        // Find similar songs for each liked song
+        unordered_map<string, double> song_scores;
+
+        for (const auto& liked_song_id : it->second) {
+            auto song_it = song_map.find(liked_song_id);
+            if (song_it == song_map.end()) continue;
+
+            auto similar = kdtree.findSimilarSongs(song_it->second, k_nearest);
+
+            for (const auto& similar_id : similar) {
+                // Don't recommend already liked songs
+                if (it->second.find(similar_id) == it->second.end()) {
+                    song_scores[similar_id] += 1.0;
+                }
+            }
+        }
+
+        // Convert to recommendations
+        for (const auto& it : song_scores) {
+            auto& song_id = it.first;
+            auto& score = it.second;
+            auto song_it = song_map.find(song_id);
+            if (song_it != song_map.end()) {
+                recommendations.push_back(
+                    Recommendation(song_id, song_it->second.title, score, "content")
+                );
+            }
+        }
+
+        // Sort by score
+        sort(recommendations.begin(), recommendations.end());
+
+        if (recommendations.size() > static_cast<size_t>(num_recommendations)) {
+            recommendations.resize(num_recommendations);
+        }
+
+        return recommendations;
+    }
         
 //Pillar 2
     vector<Recommendation> getUserCollaborativeRecommendations(
