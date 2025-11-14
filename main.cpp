@@ -133,16 +133,12 @@ void demonstrateSearch(RecommendationEngine& engine) {
     std::vector<std::string> queries = {"bl", "star", "love", "sun", "bad"};
 
     for (const auto& query : queries) {
-        auto results = engine.searchAutocomplete(query, 5);
-        std::cout << "\nQuery: \"" << query << "\"" << std::endl;
-        std::cout << "Results:" << std::endl;
+        std::cout << "\nQuery: \"" << query << "\"\nResults:\n";
 
-        if (results.empty()) {
-            std::cout << "  No results found." << std::endl;
-        } else {
-            for (size_t i = 0; i < results.size(); ++i) {
-                std::cout << "  " << (i + 1) << ". " << results[i] << std::endl;
-            }
+        auto results = engine.searchAutocomplete(query);
+
+        for (const auto& title : results) {
+            std::cout << "  - " << title << "\n";
         }
     }
 }
