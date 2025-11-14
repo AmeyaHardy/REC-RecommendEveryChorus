@@ -9,12 +9,13 @@
 #include <cmath>
 #include <set>
 
+using namespace std;
 
 struct Edge {
-    std::string to;
+    string to;
     double weight;
 
-    Edge(const std::string& t, double w) : to(t), weight(w) {}
+    Edge(const string& t, double w) : to(t), weight(w) {}
 
     bool operator<(const Edge& other) const {
         return weight < other.weight; // For min-heap
@@ -24,18 +25,17 @@ struct Edge {
 class WeightedGraph {
 private:
     // Adjacency list representation
-    std::unordered_map<std::string, std::vector<Edge>> adj_list;
+    unordered_map<string, vector<Edge>> adj_list;
 
 public:
-
-    void addVertex(const std::string& user_id) {
+    
+    void addVertex(const string& user_id) {
         if (adj_list.find(user_id) == adj_list.end()) {
-            adj_list[user_id] = std::vector<Edge>();
+            adj_list[user_id] = vector<Edge>();
         }
     }
 
-
-    void addEdge(const std::string& user1, const std::string& user2, double weight) {
+    void addEdge(const string& user1, const string& user2, double weight) {
         addVertex(user1);
         addVertex(user2);
 
@@ -43,8 +43,7 @@ public:
         adj_list[user2].push_back(Edge(user1, weight));
     }
 
-
-    double getEdgeWeight(const std::string& user1, const std::string& user2) const {
+    double getEdgeWeight(const string& user1, const string& user2) const {
         auto it = adj_list.find(user1);
         if (it == adj_list.end()) return 0.0;
 
@@ -56,8 +55,8 @@ public:
         return 0.0;
     }
 
-    std::vector<std::pair<std::string, double>> getTopKSimilarUsers(
-        const std::string& user_id,
+    vector<pair<string, double>> getTopKSimilarUsers(
+        const string& user_id,
         int k
     ) const {
         auto it = adj_list.find(user_id);
@@ -66,13 +65,13 @@ public:
         }
 
         // Use priority queue to get top K (max-heap)
-        std::priority_queue<std::pair<double, std::string>> pq;
+        priority_queue<pair<double, string>> pq;
 
         for (const auto& edge : it->second) {
             pq.push({edge.weight, edge.to});
         }
 
-        std::vector<std::pair<std::string, double>> result;
+        vector<pair<string, double>> result;
         while (!pq.empty() && result.size() < static_cast<size_t>(k)) {
             auto top = pq.top();
             pq.pop();
@@ -83,8 +82,8 @@ public:
     }
 
     static double jaccardSimilarity(
-        const std::set<std::string>& set1,
-        const std::set<std::string>& set2
+        const set<string>& set1,
+        const set<string>& set2
     ) {
         if (set1.empty() && set2.empty()) return 0.0;
 
@@ -102,10 +101,9 @@ public:
         return union_size > 0 ? static_cast<double>(intersection) / union_size : 0.0;
     }
 
-
     static double cosineSimilarity(
-        const std::unordered_map<std::string, int>& vec1,
-        const std::unordered_map<std::string, int>& vec2
+        const unordered_map<string, int>& vec1,
+        const unordered_map<string, int>& vec2
     ) {
         if (vec1.empty() || vec2.empty()) return 0.0;
 
@@ -114,7 +112,9 @@ public:
         double norm2 = 0.0;
 
         // Calculate dot product
-        for (const auto& [song_id, count1] : vec1) {
+        for (const auto& it1 : vec1) {
+            auto& song_id = it1.first;
+            auto& count1 = it1.second;
             auto it = vec2.find(song_id);
             if (it != vec2.end()) {
                 dot_product += count1 * it->second;
@@ -122,29 +122,30 @@ public:
             norm1 += count1 * count1;
         }
 
-        for (const auto& [song_id, count2] : vec2) {
+        for (const auto& it : vec2) {
+            auto& song_id = it.first;
+            auto& count2 = it.second;
             norm2 += count2 * count2;
         }
 
         if (norm1 == 0.0 || norm2 == 0.0) return 0.0;
 
-        return dot_product / (std::sqrt(norm1) * std::sqrt(norm2));
+        return dot_product / (sqrt(norm1) * sqrt(norm2));
     }
 
-
-    std::vector<std::pair<std::string, double>> getNeighbors(const std::string& user_id) const {
+    vector<pair<string, double>> getNeighbors(const string& user_id) const {
         auto it = adj_list.find(user_id);
         if (it == adj_list.end()) {
             return {};
         }
 
-        std::vector<std::pair<std::string, double>> neighbors;
+        vector<pair<string, double>> neighbors;
         for (const auto& edge : it->second) {
             neighbors.push_back({edge.to, edge.weight});
         }
 
         // Sort by weight descending
-        std::sort(neighbors.begin(), neighbors.end(),
+        sort(neighbors.begin(), neighbors.end(),
             [](const auto& a, const auto& b) {
                 return a.second > b.second;
             });
@@ -152,26 +153,29 @@ public:
         return neighbors;
     }
 
-
     int getVertexCount() const {
         return adj_list.size();
     }
 
     int getEdgeCount() const {
         int count = 0;
-        for (const auto& [user, edges] : adj_list) {
+        for (const auto& it : adj_list) {
+            auto& user = it.first;
+            auto& edges = it.second;
             count += edges.size();
         }
         return count / 2; // Divide by 2 for undirected graph
     }
 
-    bool hasVertex(const std::string& user_id) const {
+    bool hasVertex(const string& user_id) const {
         return adj_list.find(user_id) != adj_list.end();
     }
 
-    std::vector<std::string> getAllVertices() const {
-        std::vector<std::string> vertices;
-        for (const auto& [user, _] : adj_list) {
+    vector<string> getAllVertices() const {
+        vector<string> vertices;
+        for (const auto& it : adj_list) {
+            auto& user = it.first;
+            auto& score = it.second;
             vertices.push_back(user);
         }
         return vertices;
@@ -182,4 +186,4 @@ public:
     }
 };
 
-#endif // WEIGHTED_GRAPH_H
+#endif
