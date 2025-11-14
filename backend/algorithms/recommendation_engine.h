@@ -8,11 +8,11 @@
 #include <algorithm>
 #include <iostream>
 #include "../core/entities.h"
-#include "../data_structures/union_find.h"
-#include "../data_structures/weighted_graph"
-#include "../data_structures/bipartite_graph"
-#include "../data_structures/tries.h"
-#include "../data_structures/kdtree.h"
+#include "../Data_Structures/union_find.h"
+#include "../Data_Structures/weighted_graph"
+#include "../Data_Structures/bipartite_graph"
+#include "../Data_Structures/tries.h"
+#include "../Data_Structures/kdtree.h"
 
 using namespace std;
 
