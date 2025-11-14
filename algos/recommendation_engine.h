@@ -232,6 +232,45 @@ for (const auto& artist : artists) {
 
         return recommendations;
     }
+
+    //PILLAR 3
+    vector<Recommendation> getArtistBasedRecommendations(
+        const string& user_id,
+        int num_recommendations = 10
+    ) {
+        vector<Recommendation> recommendations;
+
+        auto song_scores = bipartite_graph.recommendFromTopArtists(
+            user_id,
+            artist_songs,
+            top_artists
+        );
+
+        // Filter out already liked songs
+        auto& user_likes = user_liked_songs[user_id];
+
+        for (const auto& it : song_scores) {
+            auto& song_id = it.first;
+            auto& score = it.second;
+            if (user_likes.find(song_id) == user_likes.end()) {
+                auto song_it = song_map.find(song_id);
+                if (song_it != song_map.end()) {
+                    recommendations.push_back(
+                        Recommendation(song_id, song_it->second.title, score, "artist-collab")
+                    );
+                }
+            }
+        }
+
+        // Sort by score
+        sort(recommendations.begin(), recommendations.end());
+
+        if (recommendations.size() > static_cast<size_t>(num_recommendations)) {
+            recommendations.resize(num_recommendations);
+        }
+
+        return recommendations;
+    }
         
 
 //Pillar 4
