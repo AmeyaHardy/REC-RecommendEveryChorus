@@ -20,12 +20,12 @@ Provide clean, documented, easily compilable C++17 code
 
 
 Features
-| Pillar                               | Data Structure Used | Algorithm                   | Complexity |
-| ------------------------------------ | ------------------- | --------------------------- | ---------- |
-| Content-Based Filtering              | K-D Tree            | K-NN                        | O(k log n) |
-| User-User Collaborative Filtering    | Weighted Graph      | Similarity + Priority Queue | O(E log k) |
-| Artist-Based Collaborative Filtering | Bipartite Graph     | Weighted aggregation        | O(A × S)   |
-| Community-Based Filtering            | Union-Find          | Community detection         | O(α(n))    |
+Sr.No  | Pillar                               | Data Structure Used | Algorithm                   | Complexity |
+------ | ------------------------------------ | ------------------- | --------------------------- | ---------- |
+  1    | Content-Based Filtering              | K-D Tree            | K-NN                        | O(k log n) |
+  2    | User-User Collaborative Filtering    | Weighted Graph      | Similarity + Priority Queue | O(E log k) |
+  3    | Artist-Based Collaborative Filtering | Bipartite Graph     | Weighted aggregation        | O(A × S)   |
+  4    | Community-Based Filtering            | Union-Find          | Community detection         | O(α(n))    |
 
 
 
