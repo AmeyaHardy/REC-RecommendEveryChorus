@@ -13,6 +13,7 @@ Project Overview
 This system demonstrates how classical DSA concepts can be applied to real-world recommendation engines.
 
 1.Core Objectives
+
 Apply advanced DSA in a real application
 Implement both content-based and collaborative filtering
 Build everything without external ML libraries
@@ -20,32 +21,33 @@ Provide clean, documented, easily compilable C++17 code
 
 2. System Capabilities
 The system supports the following high-level features:
-2.1 Content-Based Filtering (Song-to-Song Similarity)
-Uses a 4-dimensional K-D Tree to store songs based on audio features:
-energy
-danceability
-valence
-tempo
-The K-D Tree enables efficient retrieval of nearest neighbors in feature space.
 
-2.2 User-User Collaborative Filtering
-Users are represented as nodes in a weighted graph, where edges represent similarity scores based on:
-overlap in liked songs
-listening behaviour
-artist preferences
-A priority queue retrieves top neighbors for recommendation generation.
+  2.1 Content-Based Filtering (Song-to-Song Similarity)
+  Uses a 4-dimensional K-D Tree to store songs based on audio features:
+  energy
+  danceability
+  valence
+  tempo
+  The K-D Tree enables efficient retrieval of nearest neighbors in feature space.
 
-2.3 Artist-Based Collaborative Filtering
-A bipartite graph between user nodes and artist nodes is constructed.
-Weights on edges represent user–artist interaction strength (play counts, likes, etc.).
-Recommendations are generated based on the most relevant artists for a user.
+  2.2 User-User Collaborative Filtering
+  Users are represented as nodes in a weighted graph, where edges represent similarity scores based on:
+  overlap in liked songs
+  listening behaviour
+  artist preferences
+  A priority queue retrieves top neighbors for recommendation generation.
 
-2.4 Taste Community Detection (Union-Find)
-Users who share similar listening habits are grouped via a disjoint-set union structure.
-This allows the system to provide community-based recommendations:
-common songs within the community
-shared artists
-trending preferences
+  2.3 Artist-Based Collaborative Filtering
+  A bipartite graph between user nodes and artist nodes is constructed.
+  Weights on edges represent user–artist interaction strength (play counts, likes, etc.).
+  Recommendations are generated based on the most relevant artists for a user.
+
+  2.4 Taste Community Detection (Union-Find)
+  Users who share similar listening habits are grouped via a disjoint-set union structure.
+  This allows the system to provide community-based recommendations:
+  common songs within the community
+  shared artists
+  trending preferences
 
 
 
@@ -61,13 +63,21 @@ Sr.No  | Pillar                               | Data Structure Used | Algorithm 
 
 
 4.Data Structures Implemented
+
 K-D Tree – multi-dimensional nearest neighbor search
+
 Weighted Graph – models user similarity
+
 Bipartite Graph – user–artist relationships
+
 Union-Find – clustering into taste communities
+
 Trie – prefix-based search and autocomplete
+
 Hash Maps / Sets – constant-time lookups
+
 Priority Queues – top-K recommendation ranking
+
 
 
 5.Dataset
@@ -173,3 +183,18 @@ user–artist bipartite graphs
 taste community clusters
 2D projections of K-D Tree splits
 These provide a graphical understanding of the relationships and clusters.
+
+
+10. Cloning the Repository
+Clone using HTTPS : git clone https://github.com/<your-username>/<your-repo-name>.git
+
+Clone using SSH : git clone git@github.com:<your-username>/<your-repo-name>.git
+
+Clone using GitHub CLI : gh repo clone <your-username>/<your-repo-name>
+
+After Cloning : cd <your-repo-name>
+
+Then continue with: cd backend
+g++ -std=c++17 -O2 main.cpp -o recommendation_engine
+./recommendation_engine
+
