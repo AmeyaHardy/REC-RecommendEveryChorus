@@ -257,6 +257,8 @@ Then continue with: cd backend
 g++ -std=c++17 -O2 main.cpp -o recommendation_engine
 ./recommendation_engine
 
+To fix encoding also run : chcp 65001
+$OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
 
 
 # 📊 Visualizations (Graph Analysis)
